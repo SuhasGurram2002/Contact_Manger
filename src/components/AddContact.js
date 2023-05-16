@@ -1,20 +1,33 @@
 import React from "react";
 
+const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+
 class AddContact extends React.Component {
   state = {
     name: "",
     email: "",
     ph: "",
   };
-
   add = (e) => {
     e.preventDefault();
     if (this.state.name === "" || this.state.email === "" || this.state.ph === "") {
       alert("ALl the fields are mandatory!");
       return;
     }
-    this.props.addContactHandler(this.state);
-    this.setState({ name: "", email: "" , ph:""});
+    if(this.state.ph.match('[0-9]{10}') && this.state.email.match(isValidEmail)){
+      this.props.addContactHandler(this.state);
+      this.setState({ name: "", email: "" , ph:""});
+    }
+    else{
+      if(!this.state.email.match(isValidEmail)){
+        alert("enter a valid email");
+        return;
+      }
+      else{
+        alert("enter a valid phone number");
+        return;
+      }
+    }
   };
   render() {
     return (
@@ -34,7 +47,7 @@ class AddContact extends React.Component {
           <div className="field">
             <label>Email</label>
             <input
-              type="text"
+              type="email"
               name="email"
               placeholder="Email"
               value={this.state.email}
